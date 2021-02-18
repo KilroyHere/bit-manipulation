@@ -1,0 +1,2300 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Bit Manipulation</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 90%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 100%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+</style></head><body><article id="3e4d6908-20fd-43cb-b5f1-1968bb68863a" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">🔟</span></div><h1 class="page-title">Bit Manipulation</h1></header><div class="page-body"><h3 id="3d879058-3bab-4630-a01e-2b278cb39c9d" class=""><strong>absVal -&gt; 4/10 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="ac61af0e-6abf-4ced-9f0e-acbd3261cd64" class="code"><code>/*
+ * absVal - absolute value of x
+ *   Example: absVal(-1) = 1.
+ *   You may assume -TMax <= x <= TMax
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 10
+ *   Rating: 4
+ */
+int absVal(int x)  // 4 ops
+{
+    int neg_mask = x >> 31;// Return x if x is nonnegative else ones' complement + 1 (two's complement)
+    return (x ^ neg_mask) + (neg_mask & 1);
+}</code></pre><h3 id="42d2d93d-84bc-409a-8258-ffcb612e2aaa" class=""><strong>addOK -&gt; 6/20 op</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="258e22ca-7c03-4daa-8918-ee7a5f708747" class="code"><code>/*
+ * addOK - Determine if can compute x+y without overflow
+ *   Example: addOK(0x80000000, 0x80000000) = 0,
+ *            addOK(0x80000000, 0x70000000) = 1,
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 20
+ *   Rating: 3
+ */
+int addOK(int x, int y)  // 6 op
+{
+    /*
+     * Observe:
+     * Return 0 (overflow) when (+,0) + (+,0) => (-) or (-) + (-) => (+,0),
+     * that is, sign of x and y are same and sign of x (or y) and sum are
+     * different. Since we can compute whether two signs are DIFFERENT faster,
+     * convert the observation to sign of x and sum are DIFFERENT and sign of y
+     * and sum are DIFFERENT.
+     *
+     * See also addOK_7()
+     */
+    int sum = x + y;
+    return !(((x ^ sum) & (y ^ sum)) >> 31);
+}int addOK_7(int x, int y)  // 7 op
+{
+    // See addOK_9(), reduce ops by delaying getting signint sum = x + y;
+    return (((x ^ y) | ~(sum ^ x)) >> 31) & 1;
+}int addOK_9(int x, int y)  // 9 ops
+{
+    int sign_x = x >> 31;
+    int sign_y = y >> 31;
+    int sign_sum = (x + y) >> 31;// return 1 if sign of x and y are different or sign of sum and x are same
+    return ((sign_x ^ sign_y) | ~(sign_sum ^ sign_x)) & 1;
+}</code></pre><h3 id="fd82cb05-6636-4158-afcb-88803381c834" class=""><strong>allEvenBits -&gt; 7/12 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="eb719bd9-8139-4edf-96f0-ab2704a0c62d" class="code"><code>/*
+ * allEvenBits - return 1 if all even-numbered bits in word set to 1
+ *   where bits are numbered from 0 (least significant) to 31 (most significant)
+ *   Examples allEvenBits(0xFFFFFFFE) = 0, allEvenBits(0x55555555) = 1
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 12
+ *   Rating: 2
+ */
+int allEvenBits(int x)  // 7 ops
+{
+    int hex5555 = (0x55 << 8) | 0x55;
+    int hex55555555 = (hex5555 << 16) | hex5555;
+    return !((x & hex55555555) ^ hex55555555);
+}int allEvenBits_9(int x)  // 9 ops
+{
+    x = x & x >> 16;
+    x = x & x >> 8;
+    x = x & x >> 4;
+    x = x & x >> 2;
+    return x & 1;
+}</code></pre><h3 id="97289135-12ef-4366-8a48-8733602d685f" class=""><strong>allOddBits -&gt; 7/12 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="68926d43-aed5-4d68-95a2-99bfde43182d" class="code"><code>/*
+ * allOddBits - return 1 if all odd-numbered bits in word set to 1
+ *   where bits are numbered from 0 (least significant) to 31 (most significant)
+ *   Examples allOddBits(0xFFFFFFFD) = 0, allOddBits(0xAAAAAAAA) = 1
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 12
+ *   Rating: 2
+ */
+int allOddBits(int x)  // 7 ops
+{
+    int hexAAAA = (0xAA << 8) | 0xAA;
+    int hexAAAAAAAA = (hexAAAA << 16) | hexAAAA;
+    return !((x & hexAAAAAAAA) ^ hexAAAAAAAA);
+}int allOddBits_10(int x)  // 10 ops
+{
+    x = x & x >> 16;
+    x = x & x >> 8;
+    x = x & x >> 4;
+    x = x & x >> 2;
+    return (x >> 1) & 1;
+}</code></pre><h3 id="bf68606a-e3af-462e-bde6-ad7d2618f2c8" class=""><strong>anyEvenBit -&gt; 7/12 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="51c91b01-14fa-4c6c-9033-4fd3f0994c8c" class="code"><code>/*
+ * anyEvenBit - return 1 if any even-numbered bit in word set to 1
+ *   where bits are numbered from 0 (least significant) to 31 (most significant)
+ *   Examples anyEvenBit(0xA) = 0, anyEvenBit(0xE) = 1
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 12
+ *   Rating: 2
+ */
+int anyEvenBit(int x)  // 7 ops
+{
+    int hex5555 = (0x55 << 8) | 0x55;
+    int hex55555555 = (hex5555 << 16) | hex5555;
+    return !!(x & hex55555555);
+}int anyEvenBit_9(int x)  // 9 ops
+{
+    x = x | x >> 16;
+    x = x | x >> 8;
+    x = x | x >> 4;
+    x = x | x >> 2;
+    return x & 1;
+}</code></pre><h3 id="7d7b7e21-780f-42a2-840d-e3c6339b13a3" class=""><strong>anyOddBit -&gt; 7/12 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="1b0b2e0a-eac9-4ef3-b223-5955ef545ad4" class="code"><code>/*
+ * anyOddBit - return 1 if any odd-numbered bit in word set to 1
+ *   where bits are numbered from 0 (least significant) to 31 (most significant)
+ *   Examples anyOddBit(0x5) = 0, anyOddBit(0x7) = 1
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 12
+ *   Rating: 2
+ */
+int anyOddBit(int x)  // 7 ops
+{
+    int hexAAAA = (0xAA << 8) | 0xAA;
+    int hexAAAAAAAA = (hexAAAA << 16) | hexAAAA;
+    return !!(x & hexAAAAAAAA);
+}int anyOddBit_10(int x)  // 10 ops
+{
+    x = x | x >> 16;
+    x = x | x >> 8;
+    x = x | x >> 4;
+    x = x | x >> 2;
+    return (x >> 1) & 1;
+}</code></pre><h3 id="e7982fbb-e655-4c3f-87e3-9253e9bdfe58" class=""><strong>bang -&gt; 5/12 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="d87bab94-38b2-4d33-b131-a86639366cdc" class="code"><code>/*
+ * bang - Compute !x without using !
+ *   Examples: bang(3) = 0, bang(0) = 1
+ *   Legal ops: ~ & ^ | + << >>
+ *   Max ops: 12
+ *   Rating: 4
+ */
+int bang(int x)  // 5 ops
+{
+    /*
+     * Consider sign bit of x and two's complement of x:
+     * x = 0     => both are 0   WE NEED THIS
+     * x = tmin  => both are 1
+     * otherwise => exactly one 0 and one 1
+     */int x_twos_comp = ~x + 1;
+    return ((x | x_twos_comp) >> 31) + 1;
+}int bang_12(int x)  // 12 ops
+{
+    x = x | x >> 16;
+    x = x | x >> 8;
+    x = x | x >> 4;
+    x = x | x >> 2;
+    x = x | x >> 1;
+    return ~x & 1;
+}</code></pre><h3 id="d04b87f8-7b89-48ab-b77e-49fd38596d71" class=""><strong>bitAnd -&gt; 4/8 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="db79abdb-dedb-4f06-9709-589890182de0" class="code"><code>/*
+ * bitAnd - x&y using only ~ and |
+ *   Example: bitAnd(6, 5) = 4
+ *   Legal ops: ~ |
+ *   Max ops: 8
+ *   Rating: 1
+ */
+int bitAnd(int x, int y)  // 4 ops
+{
+    return ~(~x | ~y);
+}</code></pre><h3 id="14ba6d16-4bb3-4c29-9bea-3bd3fdd279f2" class=""><strong>bitCount -&gt; 24/40 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="2f843658-3d10-4e28-9363-eeb60d2130c2" class="code"><code>/*
+ * bitCount - returns count of number of 1's in word
+ *   Examples: bitCount(5) = 2, bitCount(7) = 3
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 40
+ *   Rating: 4
+ */
+int bitCount(int x)  // 24 ops
+{
+    // See bitCount_30()int hex0F0F = (0x0F << 8) | 0x0F;
+    int hex0F0F0F0F = (hex0F0F << 16) | hex0F0F;
+    int hex33333333 = hex0F0F0F0F ^ (hex0F0F0F0F << 2);
+    int hex55555555 = hex33333333 ^ (hex33333333 << 1);
+    x = (x & hex55555555) + ((x >> 1) & hex55555555);
+    x = (x & hex33333333) + ((x >> 2) & hex33333333);/*
+     * Idea from
+     * http://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetParallel
+     * Since x is now 4-bit per group and the maximum number of 1 after add up
+     * two group is 8, which is representable in 4-bit, so we can do mask after
+     * add.
+     * Benefits: save 1 op (no need to mask twice)
+     */
+    x = (x + (x >> 4)) & hex0F0F0F0F;// Same concept with above but save more ops
+    x = x + (x >> 8);
+    x = (x + (x >> 16)) & 0xFF;return x;
+}int bitCount_30(int x)  // 30 ops
+{
+    /*
+     * Idea: https://www.viseator.com/2017/06/18/CS_APP_DataLab/
+     *
+     * Counting parallel and in place
+     *
+     * 'x' means ignore the column where '+' means add up the column
+     *                                   x + x + x + x + x
+     * consider 8-bit x:                |0|1|1|1|0|0|0|1|
+     * shift 1 bit:                       |0|1|1|1|0|0|0|1|
+     * add the specific column:         | 01| 10| 00| 01|
+     * number of bit 1 in each group:   | 1 | 2 | 0 | 1 |
+     *
+     * repeat similar action              x  +  x  +  x
+     * the value of x now:              |01|10|00|01|
+     * shift 2 bit:                        |01|10|00|01|
+     * add the specific column:         | 0011| 0001|
+     * number of bit 1 in each group:   |  3  |  1  |
+     *
+     * repeat similar action               x    +    x
+     * the value of x now:              |0011|0001|
+     * shift 4 bit:                          |0011|0001|
+     * add the specific column:         | 00000100|
+     * number of bit 1 in each group:   |     4   | <- the total bit 1 in x
+     */
+    int hex0000FFFF = (0xFF << 8) | 0xFF;
+    int hex00FF00FF = hex0000FFFF ^ (hex0000FFFF << 8);
+    int hex0F0F0F0F = hex00FF00FF ^ (hex00FF00FF << 4);
+    int hex33333333 = hex0F0F0F0F ^ (hex0F0F0F0F << 2);
+    int hex55555555 = hex33333333 ^ (hex33333333 << 1);
+    x = (x & hex55555555) + ((x >> 1) & hex55555555);
+    x = (x & hex33333333) + ((x >> 2) & hex33333333);
+    x = (x & hex0F0F0F0F) + ((x >> 4) & hex0F0F0F0F);
+    x = (x & hex00FF00FF) + ((x >> 8) & hex00FF00FF);
+    x = (x & hex0000FFFF) + ((x >> 16) & hex0000FFFF);
+    return x;
+}</code></pre><h3 id="900133ad-39b4-40eb-9a4b-6628df37b609" class=""><strong>bitMask -&gt; 6/16 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="cb1c1b20-494d-439c-8555-bd7223299373" class="code"><code>/*
+ * bitMask - Generate a mask consisting of all 1's
+ *   lowbit and highbit
+ *   Examples: bitMask(5, 3) = 0x38
+ *   Assume 0 <= lowbit <= 31, and 0 <= highbit <= 31
+ *   If lowbit > highbit, then mask should be all 0's
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 16
+ *   Rating: 3
+ */
+int bitMask(int highbit, int lowbit)  // 6 ops
+{
+    // Idea from < aben20807 >:
+    // Use '~0 << lowbit' instead of '~((1 << lowbit) + ~0)'
+    int ones = ~0;  // All bits are set to 1 or decimal -1
+    int high_mask = ones << lowbit;
+    int low_mask = ((1 << highbit << 1) + ones);
+    return high_mask & low_mask;
+}</code></pre><h3 id="4111147d-5a7a-48f4-a401-c35dfa7332a8" class=""><strong>bitMatch -&gt; 8/14 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="802d40c6-e5cb-4024-9220-1a09fd81edfb" class="code"><code>/*
+ * bitMatch - Create mask indicating which bits in x match those in y
+ *            using only ~ and &
+ *   Example: bitMatch(0x7, 0xE) = 0x6
+ *   Legal ops: ~ &
+ *   Max ops: 14
+ *   Rating: 1
+ */
+int bitMatch(int x, int y)  // 8 ops
+{
+    // (x & y) | (~x & ~y) <- Apply De Morgan's law
+    return ~(~(x & y) & ~(~x & ~y));
+}</code></pre><h3 id="ecd66fff-106c-44a2-bd54-607ee7629da2" class=""><strong>bitNor -&gt; 3/8 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="7802a897-592f-42f9-8c74-584acb5fa11a" class="code"><code>/*
+ * bitNor - ~(x|y) using only ~ and &
+ *   Example: bitNor(0x6, 0x5) = 0xFFFFFFF8
+ *   Legal ops: ~ &
+ *   Max ops: 8
+ *   Rating: 1
+ */
+int bitNor(int x, int y)  // 3 ops
+{
+    // De Morgan's law
+    return ~x & ~y;
+}</code></pre><h3 id="c7637001-7d61-4832-a919-f6d5a1365974" class=""><strong>bitOr -&gt; 4/8 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="945eb5fd-f143-477a-a1e5-1812b5d6dbe9" class="code"><code>/*
+ * bitOr - x|y using only ~ and &
+ *   Example: bitOr(6, 5) = 7
+ *   Legal ops: ~ &
+ *   Max ops: 8
+ *   Rating: 1
+ */
+int bitOr(int x, int y)  // 4 ops
+{
+    return ~(~x & ~y);
+}</code></pre><h3 id="4246c746-09be-4abb-925a-13895d67dcad" class=""><strong>bitParity -&gt; 11/20 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="8ffdf61a-3f68-4bbd-968b-9cff3552d120" class="code"><code>/*
+ * bitParity - returns 1 if x contains an odd number of 0's
+ *   Examples: bitParity(5) = 0, bitParity(7) = 1
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 20
+ *   Rating: 4
+ */
+int bitParity(int x)  // 11 ops
+{
+    x = x ^ (x >> 16);
+    x = x ^ (x >> 8);
+    x = x ^ (x >> 4);
+    x = x ^ (x >> 2);
+    x = x ^ (x >> 1);
+    return x & 1;
+}</code></pre><h3 id="53bd6efa-4b06-4d8f-8362-e186cca894e4" class=""><strong>bitReverse -&gt; 34/45 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="ea6319ab-fff5-4ef9-8e79-8ca4f09a54fb" class="code"><code>/*
+ * bitReverse - Reverse bits in a 32-bit word
+ *   Examples: bitReverse(0x80000002) = 0x40000001
+ *             bitReverse(0x89ABCDEF) = 0xF7D3D591
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 45
+ *   Rating: 4
+ */
+int bitReverse(int x)  // 10 + 24 = 34 ops
+{
+    int hex0000FFFF = (0xFF << 8) | 0xFF;
+    int hex00FF00FF = hex0000FFFF ^ (hex0000FFFF << 8);
+    int hex0F0F0F0F = hex00FF00FF ^ (hex00FF00FF << 4);
+    int hex33333333 = hex0F0F0F0F ^ (hex0F0F0F0F << 2);
+    int hex55555555 = hex33333333 ^ (hex33333333 << 1);
+    x = x << 16 | ((x >> 16) & hex0000FFFF);
+    x = (x & hex00FF00FF) << 8 | ((x >> 8) & hex00FF00FF);
+    x = (x & hex0F0F0F0F) << 4 | ((x >> 4) & hex0F0F0F0F);
+    x = (x & hex33333333) << 2 | ((x >> 2) & hex33333333);
+    x = (x & hex55555555) << 1 | ((x >> 1) & hex55555555);
+    return x;
+}</code></pre><h3 id="2a302601-715c-4971-a157-2366ced67278" class=""><strong>bitXor -&gt; 8/14 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="f1477645-a84a-4a4a-8a6e-ef7dad57d8ee" class="code"><code>/*
+ * bitXor - x^y using only ~ and &
+ *   Example: bitXor(4, 5) = 1
+ *   Legal ops: ~ &
+ *   Max ops: 14
+ *   Rating: 1
+ */
+int bitXor(int x, int y)  // 8 ops
+{
+    // (~x & y) | (x & ~y)  <- Apply De Morgan's law
+    return ~(~(~x & y) & ~(x & ~y));
+}</code></pre><h3 id="caeb0156-2271-49fb-b475-d76a7d932971" class=""><strong>byteSwap -&gt; 14/25 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="6372bd3e-1a64-464f-ab82-2da82482b042" class="code"><code>/*
+ * byteSwap - swaps the nth byte and the mth byte
+ *  Examples: byteSwap(0x12345678, 1, 3) = 0x56341278
+ *            byteSwap(0xDEADBEEF, 0, 2) = 0xDEEFBEAD
+ *  You may assume that 0 <= n <= 3, 0 <= m <= 3
+ *  Legal ops: ! ~ & ^ | + << >>
+ *  Max ops: 25
+ *  Rating: 2
+ */
+int byteSwap(int x, int n, int m)  // 14 ops
+{
+    int m_dis = m << 3;
+    int n_dis = n << 3;
+    int m_mask = (x >> m_dis) & 0xFF;
+    int n_mask = (x >> n_dis) & 0xFF;// Clear mth and nth bytes if m != n (when m == n, x is already the answer)
+    x = x ^ (m_mask << m_dis) ^ (n_mask << n_dis);// Set mth and nth bytes that after swap
+    return x | (m_mask << n_dis) | (n_mask << m_dis);
+}</code></pre><h3 id="1ed44756-ddb5-4858-838a-e9b2364a98bc" class=""><strong>conditional -&gt; 7/16 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="35f0f1e8-e6b7-436e-bdaf-6a1b9cd0c08f" class="code"><code>/*
+ * conditional - same as x ? y : z
+ *   Example: conditional(2,4,5) = 4
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 16
+ *   Rating: 3
+ */
+int conditional(int x, int y, int z)  // 7 ops
+{
+    int false_mask = (!x << 31) >> 31;
+    return (~false_mask & y) | (false_mask & z);
+}</code></pre><h3 id="409d693a-0363-4add-8509-a34ba7f87147" class=""><strong>countLeadingZero -&gt; 25/50 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="aaa121e6-80c1-401a-9fe7-8c4fccb1eb5a" class="code"><code>/*
+ * countLeadingZero - count the number of zero bits preceding the
+ *                    most significant one bit
+ *   Example: countLeadingZero(0x00000F00) = 20,
+ *            countLeadingZero(0x00000001) = 31
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 50
+ *   Rating: 4
+ */
+int countLeadingZero(int x)  // 25 ops
+{
+    /*
+     * Speed up from countLeadingZero_36()
+     * Idea: ilog2() https://www.viseator.com/2017/06/18/CS_APP_DataLab/,
+     * No need to use leading_n_zero as a mask!
+     */int num_zero = 0;// value = 1 if the leading 16 bits are all zero else 0
+    int leading_n_zero = !(x >> 16);
+    int n = leading_n_zero << 4;  // n = 16 if leading_n_zero is true
+    num_zero = n;
+    x = x << n;// value = 1 if the leading 8 bits are all zero else 0
+    leading_n_zero = !(x >> 24);
+    n = leading_n_zero << 3;
+    num_zero = num_zero + n;
+    x = x << n;// value = 1 if the leading 4 bits are all zero else 0
+    leading_n_zero = !(x >> 28);
+    n = leading_n_zero << 2;
+    num_zero = num_zero + n;
+    x = x << n;// value = 1 if the leading 2 bits are all zero else 0
+    leading_n_zero = !(x >> 30);
+    n = leading_n_zero << 1;
+    num_zero = num_zero + n;
+    x = x << n;int bit_31_is_zero = !(x >> 31);
+    num_zero = num_zero + bit_31_is_zero;int bit_31_to_30_is_zero = !(x >> 30);
+    num_zero = num_zero + bit_31_to_30_is_zero;return num_zero;
+}int countLeadingZero_36(int x)  // 36 ops
+{
+    // See countLeadingZero_43()int num_zero = 0;// value = 11......11 if the leading 16 bits are all zero else 00......00
+    int leading_n_zero = !(x >> 16) << 31 >> 31;
+    num_zero = num_zero + (leading_n_zero & 16);
+    x = x << (leading_n_zero & 16);// value = 11......11 if the leading 8 bits are all zero else 00......00
+    leading_n_zero = !(x >> 24) << 31 >> 31;
+    num_zero = num_zero + (leading_n_zero & 8);
+    x = x << (leading_n_zero & 8);// value = 11......11 if the leading 4 bits are all zero else 00......00
+    leading_n_zero = !(x >> 28) << 31 >> 31;
+    num_zero = num_zero + (leading_n_zero & 4);
+    x = x << (leading_n_zero & 4);/*
+     * Method above takes 8 ops per iteration,
+     * but the next interation (8 ops) can only get 2-bit information,
+     * and we can get 1-bit information in 3 ops.
+     * Hence, consider the remaining 4 bits seperately will be faster.
+     */
+    int bit_31_is_zero = !(x >> 31);
+    num_zero = num_zero + bit_31_is_zero;int bit_31_to_30_is_zero = !(x >> 30);
+    num_zero = num_zero + bit_31_to_30_is_zero;int bit_31_to_29_is_zero = !(x >> 29);
+    num_zero = num_zero + bit_31_to_29_is_zero;int bit_31_to_28_is_zero = !(x >> 28);
+    num_zero = num_zero + bit_31_to_28_is_zero;return num_zero;
+}int countLeadingZero_43(int x)  // 43 ops
+{
+    /*
+     * https://hackmd.io/s/Bk-uxCYxz
+     *   int clz(uint32_t x) {
+     *       if (x == 0) return 32;
+     *       int n = 1;
+     *       if ((x >> 16) == 0) { n += 16; x <<= 16; }
+     *       if ((x >> 24) == 0) { n += 8; x <<= 8; }
+     *       if ((x >> 28) == 0) { n += 4; x <<= 4; }
+     *       if ((x >> 30) == 0) { n += 2; x <<= 2; }
+     *       n = n - (x >> 31);
+     *       return n;
+     *   }
+     */
+    int num_zero = 0;// value = 11......11 if the leading 16 bits are all zero else 00......00
+    int leading_n_zero = !(x >> 16) << 31 >> 31;
+    num_zero = num_zero + (leading_n_zero & 16);
+    x = x << (leading_n_zero & 16);// value = 11......11 if the leading 8 bits are all zero else 00......00
+    leading_n_zero = !(x >> 24) << 31 >> 31;
+    num_zero = num_zero + (leading_n_zero & 8);
+    x = x << (leading_n_zero & 8);// value = 11......11 if the leading 4 bits are all zero else 00......00
+    leading_n_zero = !(x >> 28) << 31 >> 31;
+    num_zero = num_zero + (leading_n_zero & 4);
+    x = x << (leading_n_zero & 4);// value = 11......11 if the leading 2 bits are all zero else 00......00
+    leading_n_zero = !(x >> 30) << 31 >> 31;
+    num_zero = num_zero + (leading_n_zero & 2);
+    x = x << (leading_n_zero & 2);// value = 11......11 if the leading 1 bits are all zero else 00......00
+    leading_n_zero = !(x >> 31) << 31 >> 31;
+    num_zero = num_zero + (leading_n_zero & 1);
+    x = x << (leading_n_zero & 1);
+    num_zero = num_zero + !(x >> 31);return num_zero;
+}</code></pre><h3 id="a5b1f287-32dd-4426-9292-a0fc710602ff" class=""><strong>copyLSB -&gt; 2/5 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="f2063880-f462-4e8e-add7-99762dd88cd2" class="code"><code>/*
+ * copyLSB - set all bits of result to least significant bit of x
+ *   Example: copyLSB(5) = 0xFFFFFFFF, copyLSB(6) = 0x00000000
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 5
+ *   Rating: 2
+ */
+int copyLSB(int x)  // 2 ops
+{
+    return (x << 31) >> 31;
+}</code></pre><h3 id="ac78ba19-e737-45c2-8db9-cdc2a546a903" class=""><strong>distinctNegation -&gt; 3/5 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="88f8b031-09dd-4d93-95ad-c2b0ca366097" class="code"><code>/*
+ * distinctNegation - returns 1 if x != -x.
+ *     and 0 otherwise
+ *   Legal ops: ! ~ & ^ | +
+ *   Max ops: 5
+ *   Rating: 2
+ */
+int distinctNegation(int x)  // 3 ops
+{
+    // Goal: Return 1 if x is not 0 (00......00) or tmin (10......00) else 0int throw_sign_bit = x << 1;  // Since !(x << 1) will get warning
+    return !!throw_sign_bit;
+}int distinctNegation_5(int x)  // 5 ops
+{
+    int x_twos_comp = ~x + 1;// Check if x is different with two's complement of x
+    return !!(x ^ x_twos_comp);
+}int distinctNegation_5_bang(int x)  // 5 ops
+{
+    // Goal: Return 1 if x is not 0 (00......00) or tmin (10......00) else 0// See bang() (case 1 and 2)
+    return ((x ^ (~x + 1)) >> 31) & 1;
+}</code></pre><h3 id="a250f8c6-e9f9-4949-b687-72ab52e45a5e" class=""><strong>dividePower2 -&gt; 7/15 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="29c8a1d1-1b94-4354-86a7-9e58ee8904c6" class="code"><code>/*
+ * dividePower2 - Compute x/(2^n), for 0 <= n <= 30
+ *                Round toward zero
+ *   Examples: dividePower2(15, 1) = 7, dividePower2(-33, 4) = -2
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 15
+ *   Rating: 2
+ */
+int dividePower2(int x, int n)  // 7 ops
+{
+    /*
+     * x >> n is equal to floor(x/(2^n)), whether x is nonnegative or negative.
+     *
+     * But we want ceil(x/(2^n)) when x is negative, that is, round toward zero.
+     * And ceil(x/(2^n)) equals to floor((x+(2^n)-1)/(2^n)) when divisor is
+     * integer. As a result,  we add (2^n)-1 to x when x is negative.
+     *
+     * See also trueThreeFourths() for the details when x is negative
+     */
+    int neg_mask = x >> 31;
+    return (x + (neg_mask & ((1 << n) + ~0))) >> n;
+}</code></pre><h3 id="f047611d-13fd-4455-a90f-00ddb0e27e9f" class=""><strong>evenBits -&gt; 4/8 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="325d8fa9-4cd4-432f-a4c2-3d4747602278" class="code"><code>/*
+ * evenBits - return word with all even-numbered bits set to 1
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 8
+ *   Rating: 1
+ */
+int evenBits(void)  // 4 ops
+{
+    int hex55 = 0x55;
+    int hex5555 = hex55 | (hex55 << 8);
+    return hex5555 | (hex5555 << 16);
+}</code></pre><h3 id="8a72a3b1-0ddf-4c4a-be83-535953ca4500" class=""><strong>ezThreeFourths -&gt; 6/12 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="4b909c79-8320-451d-9ddb-b05338cf9102" class="code"><code>/*
+ * ezThreeFourths - multiplies by 3/4 rounding toward 0,
+ *                  Should exactly duplicate effect of C expression (x*3/4),
+ *                  including overflow behavior.
+ *   Examples: ezThreeFourths(11) = 8
+ *             ezThreeFourths(-9) = -6
+ *             ezThreeFourths(1073741824) = -268435456 (overflow)
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 12
+ *   Rating: 3
+ */int ezThreeFourths(int x)  // 6 ops
+{
+    // See dividePower2()int x_mul_3 = x + (x << 1);
+    int x_mul_3_is_neg = x_mul_3 >> 31;
+    return (x_mul_3 + (x_mul_3_is_neg & 3)) >> 2;
+}// ERROR: Test ezThreeFourths_wrong(-2147483647[0x80000001]) failed...
+// Gives -536870912[0xe0000000]. Should be -536870911[0xe0000001]
+int ezThreeFourths_wrong(int x)
+{
+    return (x + (x << 1)) >> 2;  // Error: Division of negative number
+}</code></pre><h3 id="e943895d-de9c-4da8-9f81-ab1ef03622d3" class=""><strong>fitsBits -&gt; 6/15 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="3bbf499d-a752-43d6-8e6d-92c694b5a741" class="code"><code>/*
+ * fitsBits - return 1 if x can be represented as an n-bit, two's complement
+ *            integer.
+ *            1 <= n <= 32
+ *   Examples: fitsBits(5,3) = 0, fitsBits(-4,3) = 1
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 15
+ *   Rating: 2
+ */
+int fitsBits(int x, int n)  // 6 ops
+{
+    int m = 33 + ~n;  // => 32 + (~n + 1) => 32 - n
+    int x_as_n_bit = (x << m) >> m;
+    return !(x ^ x_as_n_bit);  // x == x_as_n_bit
+}</code></pre><h3 id="a5863f24-c676-4c5a-82cd-2d201d51f3d1" class=""><strong>fitsShort -&gt; 4/8 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="20f27fb2-65ce-41b3-8dda-13574c2c7109" class="code"><code>/*
+ * fitsShort - return 1 if x can be represented as a 16-bit, two's complement
+ *             integer.
+ *   Examples: fitsShort(33000) = 0, fitsShort(-32768) = 1
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 8
+ *   Rating: 1
+ */
+int fitsShort(int x)  // 4 ops
+{
+    int x_as_16_bit = (x << 16) >> 16;
+    return !(x ^ x_as_16_bit);
+}</code></pre><h3 id="0582090a-4438-42fd-a265-46d318b42968" class=""><strong>floatAbsVal -&gt; ?/10 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="f02d84d0-17ce-4dfb-8350-fcb3f44d462b" class="code"><code>/*
+ * floatAbsVal - Return bit-level equivalent of absolute value of f for
+ *               floating point argument f.
+ *               Both the argument and result are passed as unsigned int's,
+ *               but they are to be interpreted as the bit-level
+ *               representations of single-precision floating point values.
+ *               When argument is NaN, return argument..
+ *   Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
+ *   Max ops: 10
+ *   Rating: 2
+ */
+unsigned floatAbsVal(unsigned uf)  // 3? ops
+{
+    unsigned uf_abs = uf & 0x7FFFFFFF;
+    return uf_abs > 0x7F800000 ? uf : uf_abs;
+}</code></pre><h3 id="219387be-2948-4698-b99d-6fba8bb31594" class=""><strong>floatFloat2Int -&gt; ?/30 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="9d190cdd-6b1e-45ed-9a4e-b2c497be6bf8" class="code"><code>/*
+ * floatFloat2Int - Return bit-level equivalent of expression (int) f
+ *                  for floating point argument f.
+ *                  Argument is passed as unsigned int, but it is to be
+ *                  interpreted as the bit-level representation of a
+ *                  single-precision floating point value.
+ *                  Anything out of range (including NaN and infinity) should
+ *                  return 0x80000000u.
+ *   Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
+ *   Max ops: 30
+ *   Rating: 4
+ */
+int floatFloat2Int(unsigned uf)  // 21? ops
+{
+    int is_neg = uf >> 31;
+    int exponent = (uf >> 23) & 0xFF;
+    int fraction = uf & 0x7FFFFF;
+    int bias = 127;
+    int len_fraction = 23;// (NaN or INF) || greater than values that a 32-bit int can represent
+    if (exponent == 0xFF || exponent > bias + 31)
+        return 0x80000000;// Can be represented as 32-bit int
+    if (exponent >= bias) {
+        int power2 = exponent - bias;
+        if (power2 <= len_fraction)
+            fraction = fraction >> (len_fraction - power2);else
+            fraction = fraction << (power2 - len_fraction);int value = (1 << power2) | fraction;
+        return is_neg ? -value : value;
+    }// Smaller than values that a 32-bit int can represent
+    return 0;
+}</code></pre><h3 id="1d627d25-a30e-4966-bef8-404805995749" class=""><strong>floatInt2Float -&gt; ?/30 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="e6c65696-e471-4d9d-9f81-175eb9000bae" class="code"><code>/*
+ * floatInt2Float - Return bit-level equivalent of expression (float) x
+ *                  Result is returned as unsigned int, but it is to be
+ *                  interpreted as the bit-level representation of a
+ *                  single-precision floating point values.
+ *   Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
+ *   Max ops: 30
+ *   Rating: 4
+ */
+unsigned floatInt2Float(int x)  // 35? ops
+{
+    // See floatFloat2Int()
+    if (x == 0)
+        return 0;
+    int x_sign = x & 0x80000000;
+    int x_abs = x_sign ? -x : x;  // How about Tmin?int exponent, fraction;
+    int bias = 127;
+    int len_fraction = 23;
+    int power2 = 31;
+    while (!(x_abs >> power2) && power2 > 0) {
+        power2--;
+    }
+    exponent = power2 + bias;
+    fraction = ((1 << power2) - 1) & x_abs;
+    if (power2 <= len_fraction) {
+        fraction = fraction << (len_fraction - power2);
+    } else {
+        int num_fall_off = power2 - len_fraction;/*
+         * Consider round off
+         * GRS action: https://stackoverflow.com/questions/8981913
+         */
+        int G = x_abs & (1 << num_fall_off);
+        int R = x_abs & (1 << (num_fall_off - 1));/*
+         * Shift twice to avoid undefined bahavior (<< 32), since:
+         *     24 <= power2 <= 31
+         *     1 <= num_fall_off <= 8
+         * We want 'x_abs << (33 - num_fall_off)'
+         */
+        int S = x_abs << (32 - num_fall_off) << 1;
+        fraction = fraction >> (power2 - len_fraction);// Check if need to round up or round-to-even
+        fraction += R && (S || G);
+    }return (x_sign | (exponent << len_fraction)) + fraction;
+}</code></pre><h3 id="20928667-8b5d-4182-a8d9-d5a11d86dde9" class=""><strong>floatIsEqual -&gt; ?/25 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="bbdec52f-06e6-4357-9c27-5f46f91a50b1" class="code"><code>/*
+ * floatIsEqual - Compute f == g for floating point arguments f and g.
+ *                Both the arguments are passed as unsigned int's, but
+ *                they are to be interpreted as the bit-level representations
+ *                of single-precision floating point values.
+ *                If either argument is NaN, return 0.
+ *                +0 and -0 are considered equal.
+ *   Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
+ *   Max ops: 25
+ *   Rating: 2
+ */
+int floatIsEqual(unsigned uf, unsigned ug)  // 11? ops
+{
+    // return (uf is not NaN && ug is not NaN && (uf equals to ug || both are
+    // zero))
+    return (uf & 0x7FFFFFFF) <= 0x7F800000 && (ug & 0x7FFFFFFF) <= 0x7F800000 &&
+           (uf == ug || !((uf | ug) << 1));
+}</code></pre><h3 id="16da133d-05fc-48f9-a353-c465794e7799" class=""><strong>floatIsLess -&gt; ?/30 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="b1036fad-a8e3-499a-979c-691c9f314be2" class="code"><code>/*
+ * floatIsLess - Compute f < g for floating point arguments f and g.
+ *               Both the arguments are passed as unsigned int's, but
+ *               they are to be interpreted as the bit-level representations
+ *               of single-precision floating point values.
+ *               If either argument is NaN, return 0.
+ *               +0 and -0 are considered equal.
+ *   Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
+ *   Max ops: 30
+ *   Rating: 3
+ */
+int floatIsLess(unsigned uf, unsigned ug)  // 23? ops
+{
+    // Check if uf is NaN or ug is NaN or both are zero
+    if ((uf & 0x7FFFFFFF) > 0x7F800000 || (ug & 0x7FFFFFFF) > 0x7F800000 ||
+        !((uf | ug) << 1))
+        return 0;
+    int uf_sign = uf >> 31;
+    int ug_sign = ug >> 31;
+    // (uf is neg and ug is pos || (both are neg && uf < ug) ||
+    // (both are pos && uf > ug))
+    if (uf_sign > ug_sign ||
+        (ug_sign == uf_sign && ((ug_sign && ug < uf) || (!ug_sign && uf < ug))))return 1;
+    return 0;
+}</code></pre><h3 id="8d4950bd-3b84-48e2-9a19-7e5063e3a7ae" class=""><strong>floatNegate -&gt; ?/10 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="8f8dce84-ee3e-4ab0-bf67-68583cd56c92" class="code"><code>/*
+ * floatNegate - Return bit-level equivalent of expression -f for
+ *               floating point argument f.
+ *               Both the argument and result are passed as unsigned int's,
+ *               but they are to be interpreted as the bit-level
+ *               representations of single-precision floating point values.
+ *               When argument is NaN, return argument.
+ *   Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
+ *   Max ops: 10
+ *   Rating: 2
+ */
+unsigned floatNegate(unsigned uf)  // 5? ops
+{
+    int is_NaN = (uf & 0x7FFFFFFF) > 0x7F800000;
+    // Toggle sign bit if uf is not NaN
+    return is_NaN ? uf : uf ^ 0x80000000;
+}</code></pre><h3 id="90cd2cff-5aa7-4c68-bd72-fb0644c603c6" class=""><strong>floatPower2 -&gt; ?/30 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="e6082137-82ea-4c68-b074-01d4d81032c1" class="code"><code>/*
+ * floatPower2 - Return bit-level equivalent of the expression 2.0^x
+ *               (2.0 raised to the power x) for any 32-bit integer x.
+ *
+ *               The unsigned value that is returned should have the
+ *               identical bit representation as the single-precision
+ *               floating-point number 2.0^x.
+ *               If the result is too small to be represented as a denorm,
+ *               return 0. If too large, return +INF.
+ *
+ *   Legal ops: Any integer/unsigned operations incl. ||, &&. Also if, while
+ *   Max ops: 30
+ *   Rating: 4
+ */
+unsigned floatPower2(int x)  // 12? ops
+{
+    /*
+     * Observe:
+     *   exp = 2^8,   frac = 0     =>  2 ^ INF
+     *   exp = 2^8-1, frac = 0     =>  2 ^ (128)
+     *   exp = 2,     frac = 0     =>  2 ^ (-125)
+     *   exp = 1,     frac = 0     =>  2 ^ (-126)
+     *   exp = 0,     frac = 2^23  =>  2 ^ (-127)
+     *   exp = 0,     frac = 2^22  =>  2 ^ (-128)
+     *   exp = 0,     frac = 2^0   =>  2 ^ (-150)
+     */
+    if (x < -150)
+        return 0;
+    if (x <= -127)
+        return 1 << (x + 127);
+    if (x <= 128)
+        return (x + 127) << 23;
+    return 0x7F800000;  // INF;
+}</code></pre><h3 id="2e1977ee-772e-472d-b6b8-85debc0ec5a0" class=""><strong>floatScale1d2 -&gt; ?/30 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="491de1ec-1a37-468a-9c85-094beb485879" class="code"><code>/*
+ * floatScale1d2 - Return bit-level equivalent of expression 0.5*f for
+ *                 floating point argument f.
+ *                 Both the argument and result are passed as unsigned int's,
+ *                 but they are to be interpreted as the bit-level
+ *                 representation of single-precision floating point values.
+ *                 When argument is NaN, return argument
+ *   Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
+ *   Max ops: 30
+ *   Rating: 4
+ */
+unsigned floatScale1d2(unsigned uf)  // 12? ops
+{
+    int sign = uf & 0x80000000;
+    int exponent = uf & 0x7F800000;
+    if (exponent <= 0x800000) {
+        // Round-to-even
+        uf = uf + ((uf & 0x3) == 0x3);
+        int uf_abs = uf ^ sign;
+        uf = sign | (uf_abs >> 1);
+    } else if (exponent < 0x7F800000) {
+        uf = uf - 0x800000;
+    }return uf;
+}</code></pre><h3 id="5ced7f3d-bacf-4aa4-9e61-8cfbfa3e8b17" class=""><strong>floatScale2 -&gt; ?/30 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="58dd1f74-c782-4f46-b2cf-9140b4f188a9" class="code"><code>/*
+ * floatScale2 - Return bit-level equivalent of expression 2*f for
+ *               floating point argument f.
+ *               Both the argument and result are passed as unsigned int's,
+ *               but they are to be interpreted as the bit-level representation
+ *               of single-precision floating point values.
+ *               When argument is NaN, return argument
+ *   Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
+ *   Max ops: 30
+ *   Rating: 4
+ */
+unsigned floatScale2(unsigned uf)  // 8? ops
+{
+    int sign = uf & 0x80000000;
+    int exponent = uf & 0x7F800000;
+    int exponent_is_zero = !exponent;
+    if (exponent_is_zero) {
+        uf = sign | (uf << 1);
+    } else if (exponent != 0x7F800000) {
+        uf = uf + 0x800000;
+    }return uf;
+}</code></pre><h3 id="c922d912-b108-47cf-b678-9959e7c1a84f" class=""><strong>floatScale64 -&gt; ?/35 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="9b9b8045-1f24-48de-aa2f-8cf0b34bb5f6" class="code"><code>/*
+ * floatScale64 - Return bit-level equivalent of expression 64*f for
+ *                floating point argument f.
+ *                Both the argument and result are passed as unsigned int's,
+ *                but they are to be interpreted as the bit-level
+ *                representation of single-precision floating point values.
+ *                When argument is NaN, return argument
+ *   Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
+ *   Max ops: 35
+ *   Rating: 4
+ */
+unsigned floatScale64(unsigned uf)  // 15? ops
+{
+    int sign = uf & 0x80000000;
+    int num_loop = 6;
+    while (num_loop--) {
+        int exponent = uf & 0x7F800000;
+        int exponent_is_zero = !exponent;
+        if (exponent_is_zero) {
+            uf = sign | (uf << 1);
+        } else if (exponent != 0x7F800000) {
+            uf = uf + 0x800000;
+            exponent = uf & 0x7F800000;
+            // Check if grater than INF
+            if (exponent == 0x7F800000) {
+                uf = uf & 0xFF800000;  // clear fraction
+            }
+        }
+    }return uf;
+}</code></pre><h3 id="b1642ecd-e968-4154-9dd8-78f001e01816" class=""><strong>floatUnsigned2Float -&gt; ?/30 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="ea09ab2e-c982-4819-b569-3ebc1901ecd3" class="code"><code>/*
+ * floatUnsigned2Float - Return bit-level equivalent of expression (float) u
+ *                       Result is returned as unsigned int, but it is to be
+ *                       interpreted as the bit-level representation of a
+ *                       single-precision floating point values.
+ *   Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
+ *   Max ops: 30
+ *   Rating: 4
+ */
+unsigned floatUnsigned2Float(unsigned u)  // 26? ops
+{
+    if (u) {
+        int len_fraction = 23;
+        int greatest_bit_pos = 31;
+        while (!((1 << greatest_bit_pos) & u)) {
+            greatest_bit_pos--;
+        }int diff = len_fraction - greatest_bit_pos;
+        int bias = 127;
+        int exponent = bias + len_fraction - diff;  // 127 (bias) + 23 - diff
+        if (diff >= 0) {
+            u <<= diff;
+        } else {
+            diff = -diff;// GRS action: https://stackoverflow.com/questions/8981913
+            int G = u & (1 << diff);
+            int R = u & (1 << (diff - 1));
+            int S = u << (33 - diff);
+            u >>= diff;// ( Obvious || Round-to-even )
+            u += R && (S || G);
+        }// | sign=0 | exponent | fraction |
+        u = (exponent << len_fraction) | (u & 0x7FFFFF);
+    }return u;
+}</code></pre><h3 id="7e1c487e-bf95-4fc6-9efe-c1f00611300d" class=""><strong>getByte -&gt; 3/6 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="c490d399-e5d8-48b0-b95a-52277e51ce5b" class="code"><code>/*
+ * getByte - Extract byte n from word x
+ *           Bytes numbered from 0 (least significant) to 3 (most significant)
+ *   Examples: getByte(0x12345678,1) = 0x56
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 6
+ *   Rating: 2
+ */
+int getByte(int x, int n)  // 3 ops
+{
+    return (x >> (n << 3)) & 0xFF;
+}</code></pre><h3 id="efc69fa5-b882-41a4-be3a-18044013ef0d" class=""><strong>greatestBitPos -&gt; 30/70 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="79944907-772e-4397-938e-7b638e1222ef" class="code"><code>/*
+ * greatestBitPos - return a mask that marks the position of the
+ *                  most significant 1 bit. If x == 0, return 0
+ *   Example: greatestBitPos(96) = 0x40
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 70
+ *   Rating: 4
+ */
+
+int greatestBitPos(int x)  // 30 ops
+{
+    // See countLeadingZero()
+
+    int t = x;
+    int num_zero = 0;
+
+    int leading_n_zero = !(t >> 16);
+    int n = leading_n_zero << 4;
+    num_zero = n;
+    t = t << n;
+
+    leading_n_zero = !(t >> 24);
+    n = leading_n_zero << 3;
+    num_zero = num_zero + n;
+    t = t << n;
+
+    leading_n_zero = !(t >> 28);
+    n = leading_n_zero << 2;
+    num_zero = num_zero + n;
+    t = t << n;
+
+    leading_n_zero = !(t >> 30);
+    n = leading_n_zero << 1;
+    num_zero = num_zero + n;
+    t = t << n;
+
+    num_zero = num_zero + !(t >> 31) + !(t >> 30);
+
+    // if (x != 0) return 1 << (31 - n) else return 0
+    return !!x << (32 + ~num_zero);
+}
+
+int greatestBitPos_61(int x)  // 61 ops
+{
+    // bitReverse() -> leastBitPos() -> bitReverse()
+
+    int hex0000FFFF = (0xFF << 8) | 0xFF;
+    int hex00FF00FF = hex0000FFFF ^ (hex0000FFFF << 8);
+    int hex0F0F0F0F = hex00FF00FF ^ (hex00FF00FF << 4);
+    int hex33333333 = hex0F0F0F0F ^ (hex0F0F0F0F << 2);
+    int hex55555555 = hex33333333 ^ (hex33333333 << 1);
+
+    int reverse = x << 16 | ((x >> 16) & hex0000FFFF);
+    reverse = (reverse & hex00FF00FF) << 8 | ((reverse >> 8) & hex00FF00FF);
+    reverse = (reverse & hex0F0F0F0F) << 4 | ((reverse >> 4) & hex0F0F0F0F);
+    reverse = (reverse & hex33333333) << 2 | ((reverse >> 2) & hex33333333);
+    reverse = (reverse & hex55555555) << 1 | ((reverse >> 1) & hex55555555);
+
+    // x & (x - 1) clear the least bit
+    // x ^ (x & (x - 1)) get the least bit
+    int rev_no_least = reverse ^ (reverse & (reverse + ~0));
+
+    x = rev_no_least << 16 | ((rev_no_least >> 16) & hex0000FFFF);
+    x = (x & hex00FF00FF) << 8 | ((x >> 8) & hex00FF00FF);
+    x = (x & hex0F0F0F0F) << 4 | ((x >> 4) & hex0F0F0F0F);
+    x = (x & hex33333333) << 2 | ((x >> 2) & hex33333333);
+    x = (x & hex55555555) << 1 | ((x >> 1) & hex55555555);
+
+    return x;
+}
+</code></pre><h3 id="05d95c90-b6f2-4222-a869-79dc14b02518" class=""><strong>howManyBits -&gt; 34/90 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="aebf878c-ecf2-4708-9187-ba11c51b5d34" class="code"><code>/*
+ * howManyBits - return the minimum number of bits required to represent x in
+ *               two's complement
+ *  Examples: howManyBits(12) = 5
+ *            howManyBits(298) = 10
+ *            howManyBits(-5) = 4
+ *            howManyBits(0)  = 1
+ *            howManyBits(-1) = 1
+ *            howManyBits(0x80000000) = 32
+ *  Legal ops: ! ~ & ^ | + << >>
+ *  Max ops: 90
+ *  Rating: 4
+ */
+int howManyBits(int x)  // 34 ops
+{
+    /*
+     * Trivial method:
+     * Goal: Return 32 - (max(leading zeros, leading ones) - 1)
+     *
+     * return 33 - maximumOfTwo(countLeadingZero(x), countLeadingZero(~x));
+     * Done! But this method needs 25 + 26 + 13 + 2 = 66 ops
+     *
+     * We can use the same concept of counting leading zero to implement this
+     * function. See countLeadingZero()
+     */int num_bits_redundant = 0;// value = 11......11 if the leading 17 bits are the same else 00......00
+    int x_as_16_bit = x << 16 >> 16;
+    int leading_n_same = !(x_as_16_bit ^ x);
+    int n = leading_n_same << 4;
+    num_bits_redundant = num_bits_redundant + n;
+    x = x << n;// value = 11......11 if the leading 9 bits are the same else 00......00
+    leading_n_same = !((x << 8 >> 8) ^ x);
+    n = leading_n_same << 3;
+    num_bits_redundant = num_bits_redundant + n;
+    x = x << n;// value = 11......11 if the leading 5 bits are the same else 00......00
+    leading_n_same = !((x << 4 >> 4) ^ x);
+    n = leading_n_same << 2;
+    num_bits_redundant = num_bits_redundant + n;
+    x = x << n;// value = 11......11 if the leading 3 bits are the same else 00......00
+    leading_n_same = !((x << 2 >> 2) ^ x);
+    n = leading_n_same << 1;
+    num_bits_redundant = num_bits_redundant + n;
+    x = x << n;// value = 11......11 if the leading 2 bits are the same else 00......00
+    leading_n_same = !((x << 1 >> 1) ^ x);
+    num_bits_redundant = num_bits_redundant + leading_n_same;// Return 32 - num_bits_redundant
+    return 33 + ~num_bits_redundant;
+}</code></pre><h3 id="fdf936cf-6911-4636-b109-d3b4693d3216" class=""><strong>implication -&gt; 2/5 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="a295847e-479d-41d3-af0c-91c21ba3853d" class="code"><code>/*
+ * implication - return x -> y in propositional logic - 0 for false,
+ *               1 for true
+ *   Example: implication(1, 1) = 1
+ *            implication(1, 0) = 0
+ *   Legal ops: ! ~ ^ |
+ *   Max ops: 5
+ *   Rating: 2
+ */
+int implication(int x, int y)  // 2 ops
+{
+    return (!x) | y;
+}</code></pre><h3 id="f191dd33-912b-4400-9d40-b3f96a2f16eb" class=""><strong>intLog2 -&gt; 24/90 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="56f64b1d-3287-47f7-9e43-70dc8fc6edb8" class="code"><code>/*
+ * intLog2 - return floor(log base 2 of x), where x > 0
+ *   Example: intLog2(16) = 4
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 90
+ *   Rating: 4
+ */
+int intLog2(int x)  // 24 ops
+{
+    // See countLeadingZero()
+
+    int num_zero = 0;
+
+    int leading_n_zero = !(x >> 16);
+    int n = leading_n_zero << 4;  // n = 16 if leading_n_zero is true
+    num_zero = n;
+    x = x << n;
+
+    leading_n_zero = !(x >> 24);
+    n = leading_n_zero << 3;
+    num_zero = num_zero + n;
+    x = x << n;
+
+    leading_n_zero = !(x >> 28);
+    n = leading_n_zero << 2;
+    num_zero = num_zero + n;
+    x = x << n;
+
+    leading_n_zero = !(x >> 30);
+    n = leading_n_zero << 1;
+    num_zero = num_zero + n;
+    x = x << n;
+
+    // Since x > 0, no need to check if bit 31 and bit 30 are both 0
+    num_zero = num_zero + !(x >> 31);
+
+    // Return 31 - num_zero
+    return 32 + ~num_zero;
+}
+</code></pre><h3 id="e52fd2cd-2876-458c-9744-137c5b9083cd" class=""><strong>isAsciiDigit -&gt; 8/15 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="9fae4a6f-3f9f-4260-a034-e093adb8c096" class="code"><code>/*
+ * isAsciiDigit - return 1 if 0x30 <= x <= 0x39 (ASCII codes for characters
+ *                '0' to '9')
+ *   Example: isAsciiDigit(0x35) = 1.
+ *            isAsciiDigit(0x3a) = 0.
+ *            isAsciiDigit(0x05) = 0.
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 15
+ *   Rating: 3
+ */
+int isAsciiDigit(int x)  // 8 ops
+{
+    // x - 0x30 >= 0 && x - 0x39 <= 0
+    // x - 0x30 >= 0 && x - 0x3A < 0 , easier to check if a number is negative
+    // (!((x - 0x30) >> 31)) & ((x - 0x3A) >> 31);
+    return (!((x + ~0x2F) >> 31)) & ((x + ~0x39) >> 31);
+}</code></pre><h3 id="5ddaa287-21f8-4746-9119-520718b139a0" class=""><strong>isEqual -&gt; 2/5 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="7e04daa1-e9c0-452f-9079-ea29156decd7" class="code"><code>/*
+ * isEqual - return 1 if x == y, and 0 otherwise
+ *   Examples: isEqual(5,5) = 1, isEqual(4,5) = 0
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 5
+ *   Rating: 2
+ */
+int isEqual(int x, int y)  // 2 ops
+{
+    return !(x ^ y);
+}</code></pre><h3 id="f13c2706-74fc-4d7b-bfc5-bf1efd0d669f" class=""><strong>isGreater -&gt; 10/24 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="8f4d74ab-a1bd-4618-aabd-cf09fb03e8db" class="code"><code>/*
+ * isGreater - if x > y  then return 1, else return 0
+ *   Example: isGreater(4,5) = 0, isGreater(5,4) = 1
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 24
+ *   Rating: 3
+ */
+int isGreater(int x, int y)  // 10 ops
+{
+    // Speed up from isGreater_12()
+    return (((y & ~x) | ~((x ^ y) | (x + ~y))) >> 31) & 1;
+}int isGreater_12(int x, int y)  // 12 ops
+{
+    // (x is +,0 && y is -) || (x, y have same sign && (x - y) > 0) <- De Morgan
+    return ((y >> 31) & !(x >> 31)) | !(((x ^ y) >> 31) | ((x + ~y) >> 31));
+}</code></pre><h3 id="675fa53d-caf6-4ab2-b6b2-9a1bff93269c" class=""><strong>isLess -&gt; 10/24 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="65bace0e-4b0f-40ff-849b-b356706d7de9" class="code"><code>/*
+ * isLess - if x < y  then return 1, else return 0
+ *   Example: isLess(4,5) = 1.
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 24
+ *   Rating: 3
+ */
+int isLess(int x, int y)  // 10 ops
+{
+    // See isGreater()// Return isGreater(y, x)
+    return (((x & ~y) | ~((x ^ y) | (y + ~x))) >> 31) & 1;
+}</code></pre><h3 id="137871da-079d-4588-ae20-f91b5bbce816" class=""><strong>isLessOrEqual -&gt; 9/24 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="498727ba-02e7-48d2-a5c1-0d53554b5db6" class="code"><code>/*
+ * isLessOrEqual - if x <= y  then return 1, else return 0
+ *   Example: isLessOrEqual(4,5) = 1.
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 24
+ *   Rating: 3
+ */
+int isLessOrEqual(int x, int y)  // 9 ops
+{
+    // See isGreater() + De Morgan's law// Return !isGreater(x, y)
+    return (((~y | x) & ((x ^ y) | (x + ~y))) >> 31) & 1;
+}int isLessOrEqual_11(int x, int y)  // 11 ops
+{
+    // See isLessOrEqual_13()
+    return (((x & ~y) | ~((x ^ y) | (y + ~x + 1))) >> 31) & 1;
+}int isLessOrEqual_13(int x, int y)  // 13 ops
+{
+    // (x is - && y is +,0) || (x, y have same sign && (y - x) >= 0)
+    return ((x >> 31) & !(y >> 31)) | !(((x ^ y) >> 31) | ((y + ~x + 1) >> 31));
+}</code></pre><h3 id="0893c06c-e242-4b01-9918-e884b0232f0e" class=""><strong>isNegative -&gt; 2/6 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="75dfe1aa-137e-4466-94a1-9b7ec723bf78" class="code"><code>/*
+ * isNegative - return 1 if x < 0, return 0 otherwise
+ *   Example: isNegative(-1) = 1.
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 6
+ *   Rating: 2
+ */
+int isNegative(int x)  // 2 ops
+{
+    return (x >> 31) & 1;
+}</code></pre><h3 id="cdf5ebbb-cfc5-4dbc-b177-a820cb548767" class=""><strong>isNonNegative -&gt; 2/6 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="eecd6034-03bf-491a-9545-9601bd26e3e4" class="code"><code>/*
+ * isNonNegative - return 1 if x >= 0, return 0 otherwise
+ *   Example: isNonNegative(-1) = 0.  isNonNegative(0) = 1.
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 6
+ *   Rating: 2
+ */
+int isNonNegative(int x)  // 2 ops
+{
+    return !(x >> 31);
+}</code></pre><h3 id="89a81565-14f8-4f27-8301-aee75cb13885" class=""><strong>isNonZero -&gt; 5/10 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="dc8b132d-6d18-4500-a634-91c235f690c2" class="code"><code>/*
+ * isNonZero - Check whether x is nonzero using
+ *              the legal operators except !
+ *   Examples: isNonZero(3) = 1, isNonZero(0) = 0
+ *   Legal ops: ~ & ^ | + << >>
+ *   Max ops: 10
+ *   Rating: 4
+ */
+int isNonZero(int x)  // 5 ops
+{
+    // Sign bit of both zero and two's complement of zero is 0, see Bang()
+    return ((x | (~x + 1)) >> 31) & 1;
+}</code></pre><h3 id="7ba9f7c3-e8f0-4968-9f62-060cefcbbb1e" class=""><strong>isNotEqual -&gt; 3/6 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="8759f1cc-4556-494b-b95a-4437c4c1d2f1" class="code"><code>/*
+ * isNotEqual - return 0 if x == y, and 1 otherwise
+ *   Examples: isNotEqual(5,5) = 0, isNotEqual(4,5) = 1
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 6
+ *   Rating: 2
+ */
+int isNotEqual(int x, int y)  // 3 ops
+{
+    return !!(x ^ y);
+}</code></pre><h3 id="cf1e4672-8b40-4b06-bb4e-390664221372" class=""><strong>isPallindrome -&gt; 36/45 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="7ae17c1c-6821-436e-a3aa-34e34c0eba1a" class="code"><code>/*
+ * isPallindrome - Return 1 if bit pattern in x is equal to its mirror image
+ *   Example: isPallindrome(0x01234567E6AC2480) = 1
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 45
+ *   Rating: 4
+ */
+int isPallindrome(int x)  // faster? 36 ops
+{// See bitReverse()
+    int hex0000FFFF = (0xFF << 8) | 0xFF;
+    int hex00FF00FF = hex0000FFFF ^ (hex0000FFFF << 8);
+    int hex0F0F0F0F = hex00FF00FF ^ (hex00FF00FF << 4);
+    int hex33333333 = hex0F0F0F0F ^ (hex0F0F0F0F << 2);
+    int hex55555555 = hex33333333 ^ (hex33333333 << 1);
+    int reverse = x << 16 | ((x >> 16) & hex0000FFFF);
+    reverse = (reverse & hex00FF00FF) << 8 | ((reverse >> 8) & hex00FF00FF);
+    reverse = (reverse & hex0F0F0F0F) << 4 | ((reverse >> 4) & hex0F0F0F0F);
+    reverse = (reverse & hex33333333) << 2 | ((reverse >> 2) & hex33333333);
+    reverse = (reverse & hex55555555) << 1 | ((reverse >> 1) & hex55555555);
+    return !(x ^ reverse);
+}</code></pre><h3 id="200c7769-b35a-4ff1-81a5-4975e4d92e91" class=""><strong>isPositive -&gt; 4/8 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="79590197-4d22-4531-addd-9faa0573fe0b" class="code"><code>/*
+ * isPositive - return 1 if x > 0, return 0 otherwise
+ *   Example: isPositive(-1) = 0.
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 8
+ *   Rating: 2
+ */
+int isPositive(int x)  // 4 ops
+{
+    return !(x >> 31 | !x);  // isPositive_5() + De Morgan's law
+}int isPositive_5(int x)  // 5 ops
+{
+    return (!(x >> 31)) & (!!x);  // nonnegative and not zero
+}</code></pre><h3 id="51d98967-d556-46fe-9c5b-ec31cb9637a2" class=""><strong>isPower2 -&gt; 8/20 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="4354bbf3-e0ad-4c67-b161-615365665eca" class="code"><code>/*
+ * isPower2 - returns 1 if x is a power of 2, and 0 otherwise
+ *   Examples: isPower2(5) = 0, isPower2(8) = 1, isPower2(0) = 0
+ *   Note that no negative number is a power of 2.
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 20
+ *   Rating: 4
+ */
+int isPower2(int x)  // 8 ops
+{
+    // (x & (x-1)) == 0 && x > 0
+    // !(x & (x + ~0)) & !(x >> 31) & !!x  11 ops
+    // Apply De Morgan's law
+    return !((x & (x + ~0)) | (x >> 31) | !x);
+}</code></pre><h3 id="37df8c6b-60dd-4a6b-97d0-5e5f1a36d18f" class=""><strong>isTmax -&gt; 7/10 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="888e930d-a9ec-42fd-ade1-b38567a3d453" class="code"><code>/*
+ * isTmax - returns 1 if x is the maximum, two's complement number,
+ *     and 0 otherwise
+ *   Legal ops: ! ~ & ^ | +
+ *   Max ops: 10
+ *   Rating: 1
+ */
+int isTmax(int x)  // 7 ops
+{
+    // See isTmax_8() + De Morgan's law
+    int x_plus_1 = x + 1;
+    return !(~(x ^ x_plus_1) | !~x);
+}int isTmax_8(int x)  // 8 ops
+{
+    // Observe: ~(x ^ (x+1)) only equal to 0 when x is tmax or -1
+    int x_plus_1 = x + 1;
+    // ~(x ^ (x+1)) equal to 0 && x is not -1
+    return !~(x ^ x_plus_1) & !!~x;
+}int isTmax_shift(int x)  // Can't use shift
+{
+    int tmax = (0 << 31);
+    return !(x ^ tmax);
+}</code></pre><h3 id="e03896b0-f49b-46ba-ae67-ad5db2a47066" class=""><strong>isTmin -&gt; 7/10 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="15c5a912-2c14-4415-b92f-631c6302338c" class="code"><code>/*
+ * isTmin - returns 1 if x is the minimum, two's complement number,
+ *     and 0 otherwise
+ *   Legal ops: ! ~ & ^ | +
+ *   Max ops: 10
+ *   Rating: 1
+ */
+int isTmin(int x)  // 7 ops
+{
+    // See isTmax()
+    int x_minus_1 = x + ~0;
+    return !(~(x ^ x_minus_1) | !x);
+}int isTmin_shift(int x)  // Can't use shift
+{
+    int tmin = 1 << 31;
+    return !(x ^ tmin);
+}</code></pre><h3 id="144630b6-c5f1-45f9-95c0-4ab3c80d8e51" class=""><strong>isZero -&gt; 1/2 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="096325ad-c1ec-4e08-8076-1c2102de3e8a" class="code"><code>/*
+ * isZero - returns 1 if x == 0, and 0 otherwise
+ *   Examples: isZero(5) = 0, isZero(0) = 1
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 2
+ *   Rating: 1
+ */
+int isZero(int x)  // 1 ops
+{
+    return !x;
+}</code></pre><h3 id="099f7e5e-f197-45c3-af49-e127493df7ce" class=""><strong>leastBitPos -&gt; 4/6 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="56599577-c370-4780-a2cd-037ae4e27042" class="code"><code>/*
+ * leastBitPos - return a mask that marks the position of the
+ *               least significant 1 bit. If x == 0, return 0
+ *   Example: leastBitPos(96) = 0x20
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 6
+ *   Rating: 2
+ */
+int leastBitPos(int x)  // 4 ops
+{
+    int x_no_least_bit = x & (x + ~0);
+    return x ^ x_no_least_bit;
+}</code></pre><h3 id="83dd532a-fce2-4318-ad95-960ac57735c4" class=""><strong>leftBitCount -&gt; 26/50 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="63685ee4-f265-4ebc-87a3-744bc8b5a66a" class="code"><code>/*
+ * leftBitCount - returns count of number of consective 1's in
+ *                left-hand (most significant) end of word.
+ *   Examples: leftBitCount(-1) = 32, leftBitCount(0xFFF0F0F0) = 12
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 50
+ *   Rating: 4
+ */
+int leftBitCount(int x)  // 26 ops
+{
+    // Convert to counting leading zeros, see countLeadingZero()
+    x = ~x;
+
+    int num_zero = 0;
+
+    int leading_n_zero = !(x >> 16);
+    int n = leading_n_zero << 4;
+    num_zero = n;
+    x = x << n;
+
+    leading_n_zero = !(x >> 24);
+    n = leading_n_zero << 3;
+    num_zero = num_zero + n;
+    x = x << n;
+
+    leading_n_zero = !(x >> 28);
+    n = leading_n_zero << 2;
+    num_zero = num_zero + n;
+    x = x << n;
+
+    leading_n_zero = !(x >> 30);
+    n = leading_n_zero << 1;
+    num_zero = num_zero + n;
+    x = x << n;
+
+    num_zero = num_zero + !(x >> 31) + !(x >> 30);
+
+    return num_zero;
+}
+</code></pre><h3 id="9fe30566-3093-4cca-b645-511c39d32090" class=""><strong>logicalNeg -&gt; 6/12 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="9033982f-155d-4ded-9f8d-596d259cd674" class="code"><code>/*
+ * logicalNeg - implement the ! operator, using all of
+ *              the legal operators except !
+ *   Examples: logicalNeg(3) = 0, logicalNeg(0) = 1
+ *   Legal ops: ~ & ^ | + << >>
+ *   Max ops: 12
+ *   Rating: 4
+ */
+int logicalNeg(int x)  // 6 ops
+{
+    // See bang()
+    int x_twos_comp = ~x + 1;
+    return (((x | x_twos_comp) >> 31) ^ 1) & 1;
+}</code></pre><h3 id="930bf0a7-3ba8-4507-99ed-b53bda2ed8be" class=""><strong>logicalShift -&gt; 6/20 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="6a66caa0-0cac-479e-ba51-0ee3cdd6a4a5" class="code"><code>/*
+ * logicalShift - shift x to the right by n, using a logical shift
+ *                Can assume that 0 <= n <= 31
+ *   Examples: logicalShift(0x87654321,4) = 0x08765432
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 20
+ *   Rating: 3
+ */
+int logicalShift(int x, int n)  // 6 ops
+{
+    int mask = ~(1 << 31 >> n << 1);
+    return (x >> n) & mask;
+}int logicalShift_9(int x, int n)  // 9 ops
+{
+    int sign = (x >> 31) & 1;
+    // Clear sign bit to 0 and set it after shift
+    // return ((x ^ (sign << 31)) >> n) | (sign << (31 - n));
+    return ((x ^ (sign << 31)) >> n) | (sign << (32 + ~n));
+}</code></pre><h3 id="6eb0f937-e96b-4949-a1b1-2ceeda87b5c4" class=""><strong>maximumOfTwo -&gt; 13/20 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="2e3c701b-4654-41bd-9a74-9c659d0acdc7" class="code"><code>/*
+ * maximumOfTwo - compute the maximum of two integers without branching
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 20
+ *   Rating: 4
+ */
+int maximumOfTwo(int x, int y)  // 13 ops
+{
+    // See isGreater() and conditional()
+    int x_is_greater_mask = ((y & ~x) | ~((x ^ y) | (x + ~y))) >> 31;
+    return (x_is_greater_mask & x) | (~x_is_greater_mask & y);
+}</code></pre><h3 id="89291dc4-bbd1-4db8-88ba-83ff578b0ff8" class=""><strong>minimumOfTwo -&gt; 13/20 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="3bac65bb-8d4a-4e5f-8265-170e7c764a1a" class="code"><code>/*
+ * minimumOfTwo - compute the minimum of two integers without branching
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 20
+ *   Rating: 4
+ */
+int minimumOfTwo(int x, int y)  // 13 ops
+{
+    // see isLess() and conditional()
+    int x_is_less_mask = ((x & ~y) | ~((x ^ y) | (y + ~x))) >> 31;
+    return (x_is_less_mask & x) | (~x_is_less_mask & y);
+}</code></pre><h3 id="735400e6-bb73-4e72-a8a7-428d553ea60b" class=""><strong>minusOne -&gt; 1/2 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="451178a2-b9ae-4452-b6cf-c50f7f0477e4" class="code"><code>/*
+ * minusOne - return a value of -1
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 2
+ *   Rating: 1
+ */
+int minusOne(void)  // 1 ops
+{
+    return ~0;
+}</code></pre><h3 id="cb26095c-6b49-493e-8dc8-499a54b94e34" class=""><strong>multFiveEighths -&gt; 6/12 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="2322a34b-4378-4cec-b73e-cd53bc699cd6" class="code"><code>/*
+ * multFiveEighths - multiplies by 5/8 rounding toward 0.
+ *                   Should exactly duplicate effect of C expression (x*5/8),
+ *                   including overflow behavior.
+ *   Examples: multFiveEighths(77) = 48
+ *             multFiveEighths(-22) = -13
+ *             multFiveEighths(1073741824) = 13421728 (overflow)
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 12
+ *   Rating: 3
+ */
+int multFiveEighths(int x)  // 6 ops
+{
+    int x_mul_5 = x + (x << 2);
+    return (x_mul_5 + ((x_mul_5 >> 31) & 7)) >> 3;
+}</code></pre><h3 id="4ad51670-b75e-4157-8b3f-680c3c337194" class=""><strong>negate -&gt; 2/5 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="03248a08-055f-43a7-bf7a-36dc4f58d29b" class="code"><code>/*
+ * negate - return -x
+ *   Example: negate(1) = -1.
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 5
+ *   Rating: 2
+ */
+int negate(int x)  // 2 ops
+{
+    return ~x + 1;
+}</code></pre><h3 id="8538132d-3d21-409a-bc56-2249f46ea632" class=""><strong>oddBits -&gt; 4/8 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="8378e0ab-6ef2-4193-b78f-35977c594d68" class="code"><code>/*
+ * oddBits - return word with all odd-numbered bits set to 1
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 8
+ *   Rating: 2
+ */
+int oddBits(void)  // 4 ops
+{
+    int hexAAAA = 0xAA | (0xAA << 8);
+    return hexAAAA | (hexAAAA << 16);
+}</code></pre><h3 id="93b10a92-27ae-4da9-80da-66bb8117ea92" class=""><strong>remainderPower2 -&gt; 10/20 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="ef78b6b2-a071-43d8-a4c5-c4063e2a48df" class="code"><code>/*
+ * remainderPower2 - Compute x%(2^n), for 0 <= n <= 30
+ *                   Negative arguments should yield negative remainders
+ *   Examples: remainderPower2(15, 2) = 3, remainderPower2(-35, 3) = -3
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 20
+ *   Rating: 3
+ */
+int remainderPower2(int x, int n)  // 10 ops
+{
+    /*
+     * Observe:
+     * For nonnegative x, return x & (2^n - 1)
+     * For negative x and remainder is not 0,
+     * return x & (2^n - 1) with upper 32 - n bits set to 1
+     */int ones = ~0;  // All bits are set to 1 or decimal -1int remainder_mask = (1 << n) + ones;
+    int remainder = x & remainder_mask;int sign_mask = x >> 31 << n;
+    int remainder_is_not_0_mask = !remainder + ones;return (sign_mask & remainder_is_not_0_mask) | remainder;
+}int remainderPower2_16(int x, int n)  // faster, 16 ops
+{
+    int x_sign = x >> 31;
+    int x_abs = (x ^ x_sign) + (x_sign & 1);
+    int remainder_mask = (1 << n) + ~0;
+    int remainder_abs = x_abs & remainder_mask;
+    int remainder_sign = (x & (!!remainder_abs << 31)) >> 31;// Return remainder_abs two's complement if remainder should be negative
+    return (remainder_abs ^ remainder_sign) + (remainder_sign & 1);
+}</code></pre><h3 id="78e90e26-52dc-4562-b5c8-35078fefad98" class=""><strong>replaceByte-&gt; 6/10 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="5cda7a9e-2e94-4a4f-a8f1-4052a84fc6b0" class="code"><code>/*
+ * replaceByte(x,n,c) - Replace byte n in x with c
+ *                      Bytes numbered from 0 (LSB) to 3 (MSB)
+ *   Examples: replaceByte(0x12345678, 1, 0xab) = 0x1234ab78
+ *   You can assume 0 <= n <= 3 and 0 <= c <= 255
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 10
+ *   Rating: 3
+ */
+int replaceByte(int x, int n, int c)  // 6 ops
+{
+    int n_dis = n << 3;
+    int clear_mask = 0xFF << n_dis;
+    int new_mask = c << n_dis;
+    return (x & ~clear_mask) | new_mask;
+}</code></pre><h3 id="561bf9d7-e9b2-45c1-bc24-8404e2098347" class=""><strong>rotateLeft -&gt; 9/25 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="6f412e33-a995-4a3c-a5ec-11a0c6022c2e" class="code"><code>/*
+ * rotateLeft - Rotate x to the left by n
+ *              Can assume that 0 <= n <= 31
+ *   Examples: rotateLeft(0x87654321, 4) = 0x76543218
+ *   Legal ops: ~ & ^ | + << >> !
+ *   Max ops: 25
+ *   Rating: 3
+ */
+int rotateLeft(int x, int n)  // 9 ops
+{
+    int keep_mask = (1 << n) + ~0;                // (1 << n) - 1
+    int fall_off = (x >> (33 + ~n)) & keep_mask;  // 33 + ~n => 32 - n
+    return (x << n) | fall_off;
+}</code></pre><h3 id="57e9d852-18fd-424e-91b2-a968890f80af" class=""><strong>rotateRight -&gt; 12/25 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="c8de1f4f-0d00-4488-8189-3e9406b3605c" class="code"><code>/*
+ * rotateRight - Rotate x to the right by n
+ *               Can assume that 0 <= n <= 31
+ *   Examples: rotateRight(0x87654321, 4) = 0x76543218
+ *   Legal ops: ~ & ^ | + << >> !
+ *   Max ops: 25
+ *   Rating: 3
+ */
+int rotateRight(int x, int n)  // change neg to pos maybe faster? 12 ops
+{
+    int keep_mask = (1 << n) + ~0;
+    int shift_dis = 33 + ~n;  // 32 - n
+    int fall_off = (x & keep_mask) << shift_dis;
+    int clear_mask = keep_mask << shift_dis;
+    return ((x >> n) & ~clear_mask) | fall_off;
+}</code></pre><h3 id="0e863b04-b821-4491-89e5-04e065ccac28" class=""><strong>satAdd -&gt; 13/30 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="9a01a128-7e06-4fb1-a705-056210e135d4" class="code"><code>/*
+ * satAdd - adds two numbers but when positive overflow occurs, returns
+ *          maximum possible value, and when negative overflow occurs,
+ *          it returns minimum positive value.
+ *   Examples: satAdd(0x40000000, 0x40000000) = 0x7fffffff
+ *             satAdd(0x80000000, 0xffffffff) = 0x80000000
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 30
+ *   Rating: 4
+ */
+int satAdd(int x, int y)  // 13 ops
+{
+    int sum = x + y;
+    int no_overflow_mask = ((x ^ y) | ~(sum ^ x)) >> 31;
+    int tmin = 1 << 31;
+    int sum_is_neg = sum >> 31;
+    // return (no_overflow_mask & sum) |
+    //     (~no_overflow_mask & (sum < 0 ? tmax : tmin));
+    return (no_overflow_mask & sum) | (~no_overflow_mask & (tmin ^ sum_is_neg));
+}</code></pre><h3 id="1c962513-574a-4d72-a851-ff0a553483d0" class=""><strong>satMul2 -&gt; 10/20 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="3bb0cf83-2546-4ada-afa4-d483d9e1eed4" class="code"><code>/*
+ * satMul2 - multiplies by 2, saturating to Tmin or Tmax if overflow
+ *   Examples: satMul2(0x30000000) = 0x60000000
+ *             satMul2(0x40000000) = 0x7FFFFFFF (saturate to TMax)
+ *             satMul2(0x80000001) = 0x80000000 (saturate to TMin)
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 20
+ *   Rating: 3
+ */
+int satMul2(int x)  // 10 ops
+{
+    int x_mul_2 = x << 1;
+    int overflow_mask = (x_mul_2 ^ x) >> 31;
+    int tmin = 1 << 31;
+    int x_mul_2_is_neg = x_mul_2 >> 31;
+    return (~overflow_mask & x_mul_2) |
+           (overflow_mask & (tmin ^ (x_mul_2_is_neg)));
+}</code></pre><h3 id="ef71e7d5-642a-4b9d-9c61-3fa1afe02064" class=""><strong>satMul3 -&gt; 14/25 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="9ca90955-d6dd-4540-a032-2793bbf7640a" class="code"><code>/*
+ * satMul3 - multiplies by 3, saturating to Tmin or Tmax if overflow
+ *   Examples: satMul3(0x10000000) = 0x30000000
+ *             satMul3(0x30000000) = 0x7FFFFFFF (Saturate to TMax)
+ *             satMul3(0x70000000) = 0x7FFFFFFF (Saturate to TMax)
+ *              satMul3(0xD0000000) = 0x80000000 (Saturate to TMin)
+ *             satMul3(0xA0000000) = 0x80000000 (Saturate to TMin)
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 25
+ *   Rating: 3
+ */
+int satMul3(int x)  // 14 ops
+{
+    int x_mul_2 = x << 1;
+    int x_mul_3 = x_mul_2 + x;
+    int overflow_mask = ((x_mul_2 ^ x) | (x_mul_3 ^ x)) >> 31;
+    int tmax = ~(1 << 31);
+    int x_is_neg = x >> 31;
+    return (~overflow_mask & x_mul_3) | (overflow_mask & (tmax ^ (x_is_neg)));
+}</code></pre><h3 id="c1c0fe43-7141-41f5-9c46-634fd8071094" class=""><strong>sign -&gt; 3/10 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="177e34f0-3461-4e35-abf2-4518446a2274" class="code"><code>/*
+ * sign - return 1 if positive, 0 if zero, and -1 if negative
+ *   Examples: sign(130) = 1
+ *             sign(-23) = -1
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 10
+ *   Rating: 2
+ */
+int sign(int x)  // 3 ops
+{
+    return (x >> 31) | !!x;
+}</code></pre><h3 id="d21046be-b8f1-4818-b432-52083a7dd069" class=""><strong>signMag2TwosComp -&gt; 6/15 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="f90f2480-9c27-4be1-980c-ea6f0da2cdf6" class="code"><code>/*
+ * signMag2TwosComp - Convert from sign-magnitude to two's complement
+ *                    where the MSB is the sign bit
+ *   Example: signMag2TwosComp(0x80000005) = -5.
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 15
+ *   Rating: 4
+ */
+int signMag2TwosComp(int x)  // 6 ops
+{
+    // See twosComp2SignMag()int neg_mask = x >> 31;
+    int x_sign = neg_mask << 31;
+    int x_without_sign = x ^ x_sign;int x_twos_comp_if_neg = (x_without_sign ^ neg_mask) + (neg_mask & 1);
+    return x_twos_comp_if_neg;
+}int signMag2TwosComp_15(int x)  // faster, 15 ops
+{
+    int no_sign_bit = x << 1;         // Since !(x << 1) has warning
+    x = x & ~(!(no_sign_bit) << 31);  // Convert -0 to +0
+    int neg_mask = x >> 31;
+    int x_abs = x & ~(1 << 31);
+    return (neg_mask & (~x_abs + 1)) | (~neg_mask & x);
+}</code></pre><h3 id="4c98958a-081e-4642-9b54-f035e221ceba" class=""><strong>specialBits -&gt; 2/3 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="8340b44f-fca8-4c11-893e-6f9cf97382bf" class="code"><code>/*
+ * specialBits - return bit pattern 0xffca3fff
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 3
+ *   Rating: 1
+ */
+int specialBits(void)  // 2 ops
+{
+    return ~(0xD7 << 14);
+}</code></pre><h3 id="de2f0ad8-fc27-41f9-abb6-b4bca35fc8bb" class=""><strong>subtractionOK -&gt; 8/20 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="90b31baf-210d-4c56-8e1f-5d3c442a60bb" class="code"><code>/*
+ * subtractionOK - Determine if can compute x-y without overflow
+ *   Example: subtractionOK(0x80000000, 0x80000000) = 1,
+ *            subtractionOK(0x80000000, 0x70000000) = 0,
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 20
+ *   Rating: 3
+ */
+int subtractionOK(int x, int y)  // 8 ops
+{
+    /*
+     * Observe:
+     * Return 0 (overflow) when (+,0) - (-) => (-) or (-) - (+,0) => (+,0),
+     * that is, sign of x and y are different and sign of x and result are
+     * different.
+     *
+     * See addOK()
+     */int diff = x + ~y + 1;
+    return !(((x ^ y) & (x ^ diff)) >> 31);
+}int subtractionOK_13(int x, int y)  // 13 ops
+{
+    /*
+     * Reuse addOK(x, -y). However, since -Tmin equals to Tmin in c,
+     * the result of subtraction(x, Tmin) and addOK(x, -Tmin)
+     * should be the opposite.
+     *
+     * For example, if addOK(x, Tmin) returns ok, then addOK(x, -Tmin) is
+     * equals to addOK(x, Tmin) and will return ok with the result
+     * x + Tmin, but the value we want to represent is x - Tmin.
+     */int y_neg = ~y + 1;
+    int sum = x + y_neg;// See addOK()
+    int x_add_y_neg_is_OK = (((x ^ y_neg) | ~(sum ^ x)) >> 31) & 1;int tmin = 1 << 31;
+    int y_is_Tmin = !(y ^ tmin);// Toggle the result if y is Tmin
+    return x_add_y_neg_is_OK ^ y_is_Tmin;
+}</code></pre><h3 id="14124ca0-f51b-4b6d-a383-80c34164ed14" class=""><strong>thirdBits -&gt; 4/8 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="3040f67b-a75d-4dd8-a5c0-6c122632dc8f" class="code"><code>/*
+ * thirdBits - return word with every third bit (starting from the LSB)
+ *             set to 1
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 8
+ *   Rating: 1
+ */
+int thirdBits(void)  // 4 ops
+{
+    // 0x49249249
+    int hex9249 = (0x92 << 8) | 0x49;
+    return (hex9249 << 15) | hex9249;
+}int thirdBits_6(void)  // 6 ops
+{
+    return (0x49 << 24) | (0x24 << 16) | (0x92 << 8) | 0x49;
+}</code></pre><h3 id="18cf1c07-6344-41c6-af91-6536ae672523" class=""><strong>tmax -&gt; 2/4 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="e772a416-103b-4d83-b326-3db7665a21ec" class="code"><code>/*
+ * tmax - return maximum two's complement integer
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 4
+ *   Rating: 1
+ */
+int tmax(void)  // 2 ops
+{
+    return ~(1 << 31);
+}</code></pre><h3 id="637c4240-c7ba-4152-b171-ec30a3d9fa39" class=""><strong>tmin -&gt; 1/4 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="5feea170-df5a-4102-b632-5741d4bc3d99" class="code"><code>/*
+ * tmin - return minimum two's complement integer
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 4
+ *   Rating: 1
+ */
+int tmin(void)  // 1 ops
+{
+    return 1 << 31;
+}</code></pre><h3 id="9aaadd09-bb2a-434b-849d-8075b74df9f3" class=""><strong>trueFiveEighths -&gt; 11/25 on</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="acc5f40b-8940-46a2-bb03-06c27780a54e" class="code"><code>/*
+ * trueFiveEighths - multiplies by 5/8 rounding toward 0,
+ *                   avoiding errors due to overflow
+ *   Examples: trueFiveEighths(11) = 6
+ *             trueFiveEighths(-9) = -5
+ *             trueFiveEighths(0x30000000) = 0x1E000000 (no overflow)
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 25
+ *   Rating: 4
+ */
+int trueFiveEighths(int x)  // 11 op
+{
+    // See trueThreeFourths() for the conceptint x_div_8 = x >> 3;
+    int remainder = x & 0x7;  // The remainder of x/8int x_div_8_mul_5 = (x_div_8 << 2) + x_div_8;int x_is_neg = x >> 31;
+    int remainder_mul_5 = (remainder << 2) + remainder;
+    int carry = (remainder_mul_5 + (x_is_neg & 0x7)) >> 3;return x_div_8_mul_5 + carry;
+}</code></pre><h3 id="be51b47e-0c86-46f0-aa22-6c4702b46378" class=""><strong>trueThreeFourths -&gt; 11/20 op</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="774ed2e4-dfc9-4870-bc32-9fb07b86181d" class="code"><code>/*
+ * trueThreeFourths - multiplies by 3/4 rounding toward 0,
+ *                    avoiding errors due to overflow
+ *   Examples: trueThreeFourths(11) = 8
+ *             trueThreeFourths(-9) = -6
+ *             trueThreeFourths(1073741824) = 805306368 (no overflow)
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 20
+ *   Rating: 4
+ */
+int trueThreeFourths(int x)  // 11 op
+{
+    /*
+     * Since we have to avoid errors due to overflow, we can calculate
+     * the result of x/4 with remainder first and then calculate the
+     * result of 3*(x/4) + 3*remainder.
+     *
+     * For negative x, since the right shift perform division that rounds
+     * towards negative infinity, we must add one to it if there is any
+     * remainder after division so that the result is rounding towards 0.
+     */int x_div_4 = x >> 2;
+    int remainder = x & 0x3;  // The remainder of x/4int x_div_4_mul_3 = (x_div_4 << 1) + x_div_4;int x_is_neg = x >> 31;
+    int remainder_mul_3 = (remainder << 1) + remainder;
+    int carry = (remainder_mul_3 + (x_is_neg & 0x3)) >> 2;return x_div_4_mul_3 + carry;
+}</code></pre><h3 id="43fceb03-cc04-44a9-81f6-ade5ac19c122" class=""><strong>twosComp2SignMag -&gt; 6/15 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="cbcb8f01-add3-49ef-b040-2c17ffb8bee3" class="code"><code>/*
+ * twosComp2SignMag - Convert from two's complement to sign-magnitude
+ *                    where the MSB is the sign bit
+ *                    You can assume that x > TMin
+ *   Example: twosComp2SignMag(-5) = 0x80000005.
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 15
+ *   Rating: 4
+ */
+int twosComp2SignMag(int x)  // 6 ops
+{
+    // See absVal()int neg_mask = x >> 31;
+    int x_sign = neg_mask << 31;
+    int x_abs = (x ^ neg_mask) + (neg_mask & 1);return x_sign | x_abs;
+}</code></pre><h3 id="9bd020b1-6f1b-476c-8f34-cf06ff206bfe" class=""><strong>upperBits -&gt; 7/10 ops</strong></h3><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')</style><pre id="75a28b92-d43f-40f8-b849-35941f89d6c7" class="code"><code>/*
+ * upperBits - pads n upper bits with 1's
+ *             You may assume 0 <= n <= 32
+ *   Example: upperBits(4) = 0xF0000000
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 10
+ *   Rating: 1
+ */
+int upperBits(int n)  // 7 ops
+{
+    /*
+     * If directly return ~0 << (32 - n), the result is only correct when
+     * 1 <= n <= 32.
+     * However, if n is 0, the return value should be 0 and we will compute
+     * ~0 << (32 - 0), that is, ~0 << 32 which behavior is undefined.
+     * Therefore, we can mask the shift amount with 0x0 if n is 0 to avoid
+     * this undefined behavior.
+     */// value = 11......11 if n != 0 else 00......00
+    int n_is_not_0_mask = !n + ~0;
+    return n_is_not_0_mask << ((33 + ~n) & n_is_not_0_mask);
+}int upperBits_undefined_behavior(int n)  // 6 ops
+{
+    /* INTEGER CODING RULES:
+     * You may assume that your machine:
+     * 3. Has unpredictable behavior when shifting if the shift amount
+     *    is less than 0 or greater than 31.
+     */// >> -1 is has unpredictable behavior! (when n == 0)
+    return (!!n << 31) >> (n + ~0);
+}int upperBits_9(int n)  // 9 ops
+{
+    // return n ? (1 << 31) >> (n-1) : 0;
+    int n_is_0 = (!n << 31) >> 31;
+    return ~n_is_0 & ((1 << 31) >> (n + ~0));
+}</code></pre></div></article></body></html>
